@@ -1,0 +1,317 @@
+$fade-in-ms: 500ms;
+$fade-out-ms: 600ms;
+$unfold-ms: 300ms;
+$rotate-ms: 150ms;
+$din-light: "Helvetica";
+$din-medium: "Helvetica";
+
+@import "import_mixins.scss";
+
+
+@font-face {
+  font-family: 'Helvetica';
+  // src: url('http://labs.juan.me/gallery/css/fonts/din-light-webfont.eot');
+  // src: url('http://labs.juan.me/gallery/css/fonts/din-light-webfont.eot?#iefix') format("embedded-opentype"), url('http://labs.juan.me/gallery/css/fonts/din-light-webfont.woff') format("woff"), url('http://labs.juan.me/gallery/css/fonts/din-light-webfont.ttf') format("truetype"), url('http://labs.juan.me/gallery/css/fonts/din-light-webfont.svg#din-bold-webfont') format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Helvetica';
+  // src: url('http://labs.juan.me/gallery/css/fonts/din-medium-webfont.eot');
+  // src: url('http://labs.juan.me/gallery/css/fonts/din-medium-webfont.eot?#iefix') format("embedded-opentype"), url('http://labs.juan.me/gallery/css/fonts/din-medium-webfont.woff') format("woff"), url('http://labs.juan.me/gallery/css/fonts/din-medium-webfont.ttf') format("truetype"), url('http://labs.juan.me/gallery/css/fonts/din-medium-webfont.svg#din-bold-webfont') format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+$din-light: "Helvetica";
+$din-medium: "Helvetica";
+
+#preloader {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 50%;
+  top: 50%;
+  margin: -12px 0 0 -12px;
+  // background: url(http://labs.juan.me/gallery/images/loading-24.gif) no-repeat center center;
+  @include transition($fade-out-ms, opacity, ease-out);
+  @include opacity(1);
+
+  &.o {
+    @include opacity(0);    
+  }
+}
+
+#veil {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: rgba(0, 0, 0, 0.84);
+  z-index: 7;
+  @include transition-property(opacity, height);
+  @include transition-duration($unfold-ms * 3, 0s);
+  @include transition-timing-function(ease-out);
+  @include transition-delay(0s, $unfold-ms * 3);
+  @include opacity(0);
+
+  &.o {
+    @include transition-delay(0s, 0s);
+    @include opacity(1);
+    height: 100%;
+  }
+}
+
+#grid {
+  width: 100%;
+  height: 100%;
+  @include transition($fade-in-ms, opacity, ease-out);
+  @include opacity(0);
+  font-size: 20px;
+
+  &.loaded {
+    @include opacity(1);
+  }
+
+  .cell {
+    position: absolute;
+    width: 320px;
+    height: 240px;
+    overflow: hidden;
+    // background: url(http://labs.juan.me/gallery/images/loading-10.gif) no-repeat center center;
+
+    &.ov {
+      overflow: visible;
+    }
+
+    .detail {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      @include opacity(0);
+
+      &.l {
+        left: -100%;
+      }
+
+      &.t {
+        top: -100%;
+      }
+
+      .close {
+        position: absolute;
+        top: 3%;
+        right: 3%;
+        width: 35px;
+        height:35px;
+        z-index: 9;
+        background: black;
+        @include opacity(0);
+        @include transition($fade-in-ms, opacity, ease-out, ($unfold-ms * 3) + $fade-in-ms);
+
+        span {
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          // background: url(http://labs.juan.me/gallery/images/icon-close.png) no-repeat center center;
+          @include transition($rotate-ms, all, ease-out);
+
+          &:hover {
+            @include rotate(90deg);
+          }
+        }
+      }
+
+      .image-detail {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        // height: 100%;
+        background: white;
+        @include opacity(0);
+        z-index: 8;
+        @include transition($fade-out-ms, opacity, ease-out, $unfold-ms * 3);
+
+        img {
+          width: 100%;
+        }
+      }
+
+      &.o {
+        @include opacity(1);
+      }
+
+      &.open {
+        z-index: 7;
+        @include perspective(500);
+        @include perspective-origin(25%);
+
+        .close {
+          @include opacity(.5);
+        }
+
+        .tl {
+          @include transform(rotateX(0deg));
+          @include opacity(1);
+        }
+
+        .bl {
+          @include transform(rotateX(0deg));
+          @include opacity(1);
+        }
+
+        .tr {
+          @include transform(rotateY(0deg));
+          @include opacity(1);
+        }
+        .image-detail {
+          @include opacity(1);
+        }
+      }
+
+      &.close {
+        .close {
+          @include transition($fade-out-ms, opacity, ease-out, 0s);
+          @include opacity(0);
+        }
+
+        .image-detail {
+          @include transition($fade-out-ms, opacity, ease-out, 0s);
+          @include opacity(0);
+        }
+
+        .tr {
+          @include transition($unfold-ms, all, linear, $fade-out-ms);         
+          @include transform(rotateY(90deg));
+          @include opacity(0);
+        }
+        .bl {
+          @include transition($unfold-ms, all, linear, $fade-out-ms + $unfold-ms);          
+          @include transform(rotateX(-90deg));
+          @include opacity(0);
+        }
+        .tl {
+          @include transition($unfold-ms, all, linear, $fade-out-ms + ($unfold-ms * 2));          
+          @include transform(rotateX(-90deg));
+          @include opacity(0);
+        }
+      }
+
+      .tl {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50%;
+        height: 50%;
+        background: white;
+        @include transition($unfold-ms, all, linear);
+        @include opacity(0);
+        @include transform-origin(0%);
+        @include transform(rotateX(-90deg));
+        z-index: 6;
+      }
+
+      .bl {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 50%;
+        height: 50%;
+        background: white;
+        @include transition($unfold-ms, all, linear, $unfold-ms );
+        @include opacity(0);
+        @include transform-origin(0%);
+        @include transform(rotateX(-90deg));
+        z-index: 5;
+      }
+
+      .tr {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        background: white;
+        z-index: 4;
+        @include transition($unfold-ms, all, linear, ($unfold-ms * 2));
+        @include opacity(0);
+        @include transform-origin(0%);
+        @include transform(rotateY(90deg));
+      }
+    }
+
+    &.no-bg {
+      background: none;
+    }
+
+    &.loaded {
+      .image {
+        img {
+          @include opacity(1);
+        }
+      }
+
+      .info {
+        display: table;
+      }
+    }
+
+    .info {
+      display: none;
+      position: absolute;
+      height: inherit;
+      width: inherit;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.8);
+      @include opacity(0);
+      @include transition($fade-out-ms, opacity, ease-out);
+      
+      &:hover {
+        @include opacity(1);
+      }
+
+      .w {
+        display: table-cell;
+        vertical-align: middle;
+
+        h2 {
+          color: #333;
+          background: none;
+          text-align: center;
+          // @include font($din-light, 100%);
+          font-family: Helvetica;
+          padding: 0 5% 0 5%;
+        }       
+      }
+    }
+
+    .image {
+      position: absolute;
+      height: inherit;
+      width: inherit;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+
+      img {
+        width: 100%;
+        @include transition($fade-out-ms, opacity, ease-out);
+        @include opacity(0);          
+      }     
+    }
+
+  }
+} 

@@ -1,0 +1,24 @@
+{
+  "name": "sweet16nat",
+  "version": "0.0.1",
+  "authors": [
+    "Clelio de Paula <clelio@wesense.com.br>"
+  ],
+  "description": "sweet16nat",
+  "keywords": [
+    "wesense",
+    "giflivecam",
+    "gif"
+  ],
+  "license": "Apache",
+  "homepage": "giflivecam.wesense.com.br",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  }
+}
